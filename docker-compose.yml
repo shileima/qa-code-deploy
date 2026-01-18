@@ -1,138 +1,22 @@
 version: '3.8'
 
 services:
-  # Vite 应用实例 1 (通过 mttf3dq7wrg9on.localhost 访问)
+  # Vite 应用实例 1 (通过 f5fee6019d1a9a9a.localhost 访问)
   # 容器内部监听 5174，宿主机映射到 5174
   vite-app-1:
     build:
       context: ./packages/demo-app
       dockerfile: Dockerfile
-    container_name: render-monitor-app-mttf3dq7wrg9on
+    container_name: render-monitor-app-f5fee6019d1a9a9a
     environment:
       - NODE_ENV=development
-      - SUBDOMAIN_PREFIX=mttf3dq7wrg9on
+      - SUBDOMAIN_PREFIX=f5fee6019d1a9a9a
       - PORT=5174
       - HOST=0.0.0.0
-      - VITE_APP_PREFIX=mttf3dq7wrg9on
+      - VITE_APP_PREFIX=f5fee6019d1a9a9a
       - CI=true
     ports:
       - "5174:5174"
-    volumes:
-      - ./packages/demo-app:/app
-      - /app/node_modules
-    networks:
-      - render-monitor-network
-    command: sh -c "CI=true pnpm install && npm run dev -- --port 5174 --host 0.0.0.0"
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5174/ || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  # Vite 应用实例 2 (通过 mteyg1wky8uqgs.localhost 访问)
-  # 容器内部监听 5174，宿主机映射到 5175
-  vite-app-2:
-    build:
-      context: ./packages/demo-app
-      dockerfile: Dockerfile
-    container_name: render-monitor-app-mteyg1wky8uqgs
-    environment:
-      - NODE_ENV=development
-      - SUBDOMAIN_PREFIX=mteyg1wky8uqgs
-      - PORT=5174
-      - HOST=0.0.0.0
-      - VITE_APP_PREFIX=mteyg1wky8uqgs
-      - CI=true
-    ports:
-      - "5175:5174"
-    volumes:
-      - ./packages/demo-app:/app
-      - /app/node_modules
-    networks:
-      - render-monitor-network
-    command: sh -c "CI=true pnpm install && npm run dev -- --port 5174 --host 0.0.0.0"
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5174/ || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  # Vite 应用实例 3 (通过 thisisanewinstance.localhost 访问)
-  # 容器内部监听 5174，宿主机映射到 5176
-  vite-app-3:
-    build:
-      context: ./packages/demo-app
-      dockerfile: Dockerfile
-    container_name: render-monitor-app-thisisanewinstance
-    environment:
-      - NODE_ENV=development
-      - SUBDOMAIN_PREFIX=thisisanewinstance
-      - PORT=5174
-      - HOST=0.0.0.0
-      - VITE_APP_PREFIX=thisisanewinstance
-      - CI=true
-    ports:
-      - "5176:5174"
-    volumes:
-      - ./packages/demo-app:/app
-      - /app/node_modules
-    networks:
-      - render-monitor-network
-    command: sh -c "CI=true pnpm install && npm run dev -- --port 5174 --host 0.0.0.0"
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5174/ || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  # Vite 应用实例 4 (通过 22a9264e81aaf598.localhost 访问)
-  # 容器内部监听 5174，宿主机映射到 5177
-  vite-app-4:
-    build:
-      context: ./packages/demo-app
-      dockerfile: Dockerfile
-    container_name: render-monitor-app-22a9264e81aaf598
-    environment:
-      - NODE_ENV=development
-      - SUBDOMAIN_PREFIX=22a9264e81aaf598
-      - PORT=5174
-      - HOST=0.0.0.0
-      - VITE_APP_PREFIX=22a9264e81aaf598
-      - CI=true
-    ports:
-      - "5177:5174"
-    volumes:
-      - ./packages/demo-app:/app
-      - /app/node_modules
-    networks:
-      - render-monitor-network
-    command: sh -c "CI=true pnpm install && npm run dev -- --port 5174 --host 0.0.0.0"
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5174/ || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  # Vite 应用实例 5 (通过 0b56d5b2d404d480.localhost 访问)
-  # 容器内部监听 5174，宿主机映射到 5178
-  vite-app-5:
-    build:
-      context: ./packages/demo-app
-      dockerfile: Dockerfile
-    container_name: render-monitor-app-0b56d5b2d404d480
-    environment:
-      - NODE_ENV=development
-      - SUBDOMAIN_PREFIX=0b56d5b2d404d480
-      - PORT=5174
-      - HOST=0.0.0.0
-      - VITE_APP_PREFIX=0b56d5b2d404d480
-      - CI=true
-    ports:
-      - "5178:5174"
     volumes:
       - ./packages/demo-app:/app
       - /app/node_modules

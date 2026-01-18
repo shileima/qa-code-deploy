@@ -57,27 +57,6 @@ export const getCurrentSubdomainPrefix = () => {
  * 根据不同的子域名前缀返回不同的配置
  */
 const APP_CONFIGS = {
-  // 实例 A 的配置 (f5fee6019d1a9a9a)
-  'f5fee6019d1a9a9a': {
-    appName: '应用实例 A',
-    appId: 'app-f5fee6019d1a9a9a',
-    theme: {
-      primaryColor: '#3b82f6',
-      secondaryColor: '#60a5fa',
-      backgroundColor: '#ffffff'
-    },
-    features: {
-      showFeatureA: true,
-      showFeatureB: false,
-      showFeatureC: true
-    },
-    apiEndpoint: 'https://api-f5fee6019d1a9a9a.example.com',
-    analytics: {
-      enabled: true,
-      trackingId: 'UA-F5FEE6019D1A9A9A-001'
-    }
-  },
-
   // 默认配置（用于本地开发或其他环境）
   default: {
     appName: '默认应用',
@@ -98,7 +77,7 @@ const APP_CONFIGS = {
       trackingId: null
     }
   }
-};;;;;;;
+};;;;;;
 
 /**
  * 根据子域名前缀获取应用配置

@@ -1,57 +1,17 @@
 {
   "instances": [
     {
-      "prefix": "mttf3dq7wrg9on",
+      "prefix": "f5fee6019d1a9a9a",
       "port": 5174,
-      "containerName": "render-monitor-app-mttf3dq7wrg9on",
-      "status": "stopped",
-      "createdAt": "2026-01-18T00:00:00Z",
+      "containerName": "render-monitor-app-f5fee6019d1a9a9a",
+      "status": "running",
+      "createdAt": "2026-01-18T13:58:46Z",
       "theme": {
         "primaryColor": "#3b82f6"
       }
-    },
-    {
-      "prefix": "mteyg1wky8uqgs",
-      "port": 5175,
-      "containerName": "render-monitor-app-mteyg1wky8uqgs",
-      "status": "stopped",
-      "createdAt": "2026-01-18T00:00:00Z",
-      "theme": {
-        "primaryColor": "#10b981"
-      }
-    },
-    {
-      "prefix": "thisisanewinstance",
-      "port": 5176,
-      "containerName": "render-monitor-app-thisisanewinstance",
-      "status": "stopped",
-      "createdAt": "2026-01-18T10:52:42Z",
-      "theme": {
-        "primaryColor": "#ef4444"
-      }
-    },
-    {
-      "prefix": "22a9264e81aaf598",
-      "port": 5177,
-      "containerName": "render-monitor-app-22a9264e81aaf598",
-      "status": "running",
-      "createdAt": "2026-01-18T10:54:37Z",
-      "theme": {
-        "primaryColor": "#f59e0b"
-      }
-    },
-    {
-      "prefix": "0b56d5b2d404d480",
-      "port": 5178,
-      "containerName": "render-monitor-app-0b56d5b2d404d480",
-      "status": "running",
-      "createdAt": "2026-01-18T10:58:05Z",
-      "theme": {
-        "primaryColor": "#8b5cf6"
-      }
     }
   ],
-  "nextPort": 5176,
+  "nextPort": 5174,
   "themePool": [
     "#3b82f6",
     "#10b981",
