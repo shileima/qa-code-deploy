@@ -1,0 +1,215 @@
+/**
+ * URL 前缀配置工具
+ * 根据不同的 URL 前缀（子域名）返回不同的应用配置
+ */
+
+/**
+ * 从 hostname 中提取子域名前缀
+ * @param {string} hostname - 完整的主机名
+ * @returns {string|null} 子域名前缀，如果无法匹配则返回 null
+ */
+export const extractSubdomainPrefix = (hostname = window.location.hostname) => {
+  // 匹配格式：prefix.sandbox.nocode.sankuai.com
+  const match = hostname.match(/^([^.]+)\.sandbox\.nocode\.sankuai\.com$/);
+  if (match) {
+    return match[1];
+  }
+  
+  // 匹配格式：prefix.localhost 或 prefix.localhost:port
+  const localMatch = hostname.match(/^([^.]+)\.localhost(:\d+)?$/);
+  if (localMatch) {
+    return localMatch[1];
+  }
+  
+  // 开发环境：从 URL 查询参数或端口号推断前缀
+  if (typeof window !== 'undefined') {
+    const urlParams = new URLSearchParams(window.location.search);
+    const prefixFromQuery = urlParams.get('prefix');
+    if (prefixFromQuery) {
+      return prefixFromQuery;
+    }
+    
+    // 根据端口号推断（开发环境）
+    // 注意：端口映射已更新
+    // - 5174 -> mteyg1wky8uqgs (实例1)
+    // - 5175 -> mttf3dq7wrg9on (实例2)
+    const port = window.location.port;
+    if (port === '5174') {
+      return 'mteyg1wky8uqgs';
+    } else if (port === '5175') {
+      return 'mttf3dq7wrg9on';
+    }
+  }
+  
+  return null;
+};
+
+/**
+ * 获取当前页面的子域名前缀
+ * @returns {string|null}
+ */
+export const getCurrentSubdomainPrefix = () => {
+  return extractSubdomainPrefix(window.location.hostname);
+};
+
+/**
+ * 应用配置映射表
+ * 根据不同的子域名前缀返回不同的配置
+ */
+const APP_CONFIGS = {
+  // 实例 A 的配置
+  'mttf3dq7wrg9on': {
+    appName: '应用实例 A',
+    appId: 'app-a',
+    theme: {
+      primaryColor: '#3b82f6', // blue
+      secondaryColor: '#60a5fa',
+      backgroundColor: '#ffffff'
+    },
+    features: {
+      showFeatureA: true,
+      showFeatureB: false,
+      showFeatureC: true
+    },
+    apiEndpoint: 'https://api-a.example.com',
+    analytics: {
+      enabled: true,
+      trackingId: 'UA-APP-A-001'
+    }
+  },
+  
+  // 实例 B 的配置
+  'mteyg1wky8uqgs': {
+    appName: '应用实例 B',
+    appId: 'app-b',
+    theme: {
+      primaryColor: '#10b981', // green
+      secondaryColor: '#34d399',
+      backgroundColor: '#f9fafb'
+    },
+    features: {
+      showFeatureA: false,
+      showFeatureB: true,
+      showFeatureC: false
+    },
+    apiEndpoint: 'https://api-b.example.com',
+    analytics: {
+      enabled: true,
+      trackingId: 'UA-APP-B-001'
+    }
+  },
+  
+  // 默认配置（用于本地开发或其他环境）
+  default: {
+    appName: '默认应用',
+    appId: 'app-default',
+    theme: {
+      primaryColor: '#6366f1',
+      secondaryColor: '#818cf8',
+      backgroundColor: '#ffffff'
+    },
+    features: {
+      showFeatureA: true,
+      showFeatureB: true,
+      showFeatureC: true
+    },
+    apiEndpoint: 'http://localhost:3000/api',
+    analytics: {
+      enabled: false,
+      trackingId: null
+    }
+  }
+};
+
+/**
+ * 根据子域名前缀获取应用配置
+ * @param {string|null} prefix - 子域名前缀，如果为 null 则使用当前页面的前缀
+ * @returns {object} 应用配置对象
+ */
+export const getAppConfig = (prefix = null) => {
+  const subdomainPrefix = prefix || getCurrentSubdomainPrefix();
+  
+  if (subdomainPrefix && APP_CONFIGS[subdomainPrefix]) {
+    return APP_CONFIGS[subdomainPrefix];
+  }
+  
+  return APP_CONFIGS.default;
+};
+
+/**
+ * 检查当前页面是否匹配指定的子域名前缀
+ * @param {string} prefix - 要检查的前缀
+ * @returns {boolean}
+ */
+export const isCurrentPrefix = (prefix) => {
+  return getCurrentSubdomainPrefix() === prefix;
+};
+
+/**
+ * 应用配置 Hook（用于 React 组件）
+ * 在组件中使用时会自动根据当前 URL 前缀返回对应的配置
+ */
+export const useAppConfig = () => {
+  const prefix = getCurrentSubdomainPrefix();
+  const config = getAppConfig(prefix);
+  
+  return {
+    prefix,
+    config,
+    isPrefix: (targetPrefix) => prefix === targetPrefix
+  };
+};
+
+/**
+ * 在页面加载时应用主题配置
+ * 根据配置动态设置 CSS 变量
+ */
+export const applyThemeConfig = (config = null) => {
+  const appConfig = config || getAppConfig();
+  const root = document.documentElement;
+  
+  // 设置 CSS 变量
+  root.style.setProperty('--primary-color', appConfig.theme.primaryColor);
+  root.style.setProperty('--secondary-color', appConfig.theme.secondaryColor);
+  root.style.setProperty('--background-color', appConfig.theme.backgroundColor);
+  
+  // 设置页面标题
+  if (appConfig.appName) {
+    document.title = appConfig.appName;
+  }
+  
+  // 设置 meta 标签（可选）
+  let metaAppName = document.querySelector('meta[name="app-name"]');
+  if (!metaAppName) {
+    metaAppName = document.createElement('meta');
+    metaAppName.setAttribute('name', 'app-name');
+    document.head.appendChild(metaAppName);
+  }
+  metaAppName.setAttribute('content', appConfig.appName);
+};
+
+/**
+ * 初始化应用配置
+ * 在应用启动时调用，应用主题和全局配置
+ */
+export const initAppConfig = () => {
+  const prefix = getCurrentSubdomainPrefix();
+  const config = getAppConfig(prefix);
+  
+  // 应用主题
+  applyThemeConfig(config);
+  
+  // 在 window 对象上暴露配置（用于调试）
+  if (typeof window !== 'undefined') {
+    window.__APP_CONFIG__ = {
+      prefix,
+      config,
+      timestamp: Date.now()
+    };
+  }
+  
+  console.log(`[AppConfig] 检测到子域名前缀: ${prefix || '无'}`);
+  console.log(`[AppConfig] 应用配置:`, config);
+  
+  return { prefix, config };
+};

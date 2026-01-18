@@ -1,0 +1,28 @@
+{
+  "name": "render-monitor-system",
+  "version": "1.0.0",
+  "description": "渲染监控系统 - 用于监控和展示 React 应用的渲染状态",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter dev-tool dev & pnpm --filter demo-app dev",
+    "build": "pnpm --filter runtime-sdk build && pnpm --filter dev-tool build && pnpm --filter demo-app build",
+    "build:sdk": "pnpm --filter runtime-sdk build",
+    "dev:tool": "pnpm --filter dev-tool dev",
+    "dev:app": "pnpm --filter demo-app dev"
+  },
+  "keywords": [
+    "render-monitor",
+    "react",
+    "dev-tool",
+    "monitoring"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
