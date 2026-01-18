@@ -120,48 +120,6 @@ const APP_CONFIGS = {
     }
   },
 
-  // 实例 D 的配置 (22a9264e81aaf598)
-  '22a9264e81aaf598': {
-    appName: '应用实例 D',
-    appId: 'app-22a9264e81aaf598',
-    theme: {
-      primaryColor: '#f59e0b',
-      secondaryColor: '#fbbf24',
-      backgroundColor: '#fffbeb'
-    },
-    features: {
-      showFeatureA: false,
-      showFeatureB: true,
-      showFeatureC: true
-    },
-    apiEndpoint: 'https://api-22a9264e81aaf598.example.com',
-    analytics: {
-      enabled: true,
-      trackingId: 'UA-22A9264E81AAF598-001'
-    }
-  },
-
-  // 实例 E 的配置 (0b56d5b2d404d480)
-  '0b56d5b2d404d480': {
-    appName: '应用实例 E',
-    appId: 'app-0b56d5b2d404d480',
-    theme: {
-      primaryColor: '#8b5cf6',
-      secondaryColor: '#a78bfa',
-      backgroundColor: '#f5f3ff'
-    },
-    features: {
-      showFeatureA: true,
-      showFeatureB: false,
-      showFeatureC: true
-    },
-    apiEndpoint: 'https://api-0b56d5b2d404d480.example.com',
-    analytics: {
-      enabled: true,
-      trackingId: 'UA-0B56D5B2D404D480-001'
-    }
-  },
-
   // 默认配置（用于本地开发或其他环境）
   default: {
     appName: '默认应用',
@@ -182,7 +140,7 @@ const APP_CONFIGS = {
       trackingId: null
     }
   }
-};;;;;
+};;;
 
 /**
  * 根据子域名前缀获取应用配置

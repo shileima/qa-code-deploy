@@ -57,12 +57,12 @@ export const getCurrentSubdomainPrefix = () => {
  * 根据不同的子域名前缀返回不同的配置
  */
 const APP_CONFIGS = {
-  // 实例 A 的配置 (mttf3dq7wrg9on)
+  // 实例 A 的配置
   'mttf3dq7wrg9on': {
     appName: '应用实例 A',
-    appId: 'app-mttf3dq7wrg9on',
+    appId: 'app-a',
     theme: {
-      primaryColor: '#3b82f6',
+      primaryColor: '#3b82f6', // blue
       secondaryColor: '#60a5fa',
       backgroundColor: '#ffffff'
     },
@@ -71,97 +71,34 @@ const APP_CONFIGS = {
       showFeatureB: false,
       showFeatureC: true
     },
-    apiEndpoint: 'https://api-mttf3dq7wrg9on.example.com',
+    apiEndpoint: 'https://api-a.example.com',
     analytics: {
       enabled: true,
-      trackingId: 'UA-MTTF3DQ7WRG9ON-001'
+      trackingId: 'UA-APP-A-001'
     }
   },
-
-  // 实例 B 的配置 (mteyg1wky8uqgs)
+  
+  // 实例 B 的配置
   'mteyg1wky8uqgs': {
     appName: '应用实例 B',
-    appId: 'app-mteyg1wky8uqgs',
+    appId: 'app-b',
     theme: {
-      primaryColor: '#10b981',
+      primaryColor: '#10b981', // green
       secondaryColor: '#34d399',
       backgroundColor: '#f9fafb'
     },
     features: {
       showFeatureA: false,
       showFeatureB: true,
-      showFeatureC: true
+      showFeatureC: false
     },
-    apiEndpoint: 'https://api-mteyg1wky8uqgs.example.com',
+    apiEndpoint: 'https://api-b.example.com',
     analytics: {
       enabled: true,
-      trackingId: 'UA-MTEYG1WKY8UQGS-001'
+      trackingId: 'UA-APP-B-001'
     }
   },
-
-  // 实例 C 的配置 (thisisanewinstance)
-  'thisisanewinstance': {
-    appName: '应用实例 C',
-    appId: 'app-thisisanewinstance',
-    theme: {
-      primaryColor: '#ef4444',
-      secondaryColor: '#f87171',
-      backgroundColor: '#ffffff'
-    },
-    features: {
-      showFeatureA: true,
-      showFeatureB: false,
-      showFeatureC: true
-    },
-    apiEndpoint: 'https://api-thisisanewinstance.example.com',
-    analytics: {
-      enabled: true,
-      trackingId: 'UA-THISISANEWINSTANCE-001'
-    }
-  },
-
-  // 实例 D 的配置 (22a9264e81aaf598)
-  '22a9264e81aaf598': {
-    appName: '应用实例 D',
-    appId: 'app-22a9264e81aaf598',
-    theme: {
-      primaryColor: '#f59e0b',
-      secondaryColor: '#fbbf24',
-      backgroundColor: '#fffbeb'
-    },
-    features: {
-      showFeatureA: false,
-      showFeatureB: true,
-      showFeatureC: true
-    },
-    apiEndpoint: 'https://api-22a9264e81aaf598.example.com',
-    analytics: {
-      enabled: true,
-      trackingId: 'UA-22A9264E81AAF598-001'
-    }
-  },
-
-  // 实例 E 的配置 (0b56d5b2d404d480)
-  '0b56d5b2d404d480': {
-    appName: '应用实例 E',
-    appId: 'app-0b56d5b2d404d480',
-    theme: {
-      primaryColor: '#8b5cf6',
-      secondaryColor: '#a78bfa',
-      backgroundColor: '#f5f3ff'
-    },
-    features: {
-      showFeatureA: true,
-      showFeatureB: false,
-      showFeatureC: true
-    },
-    apiEndpoint: 'https://api-0b56d5b2d404d480.example.com',
-    analytics: {
-      enabled: true,
-      trackingId: 'UA-0B56D5B2D404D480-001'
-    }
-  },
-
+  
   // 默认配置（用于本地开发或其他环境）
   default: {
     appName: '默认应用',
@@ -182,7 +119,7 @@ const APP_CONFIGS = {
       trackingId: null
     }
   }
-};;;;;
+};
 
 /**
  * 根据子域名前缀获取应用配置

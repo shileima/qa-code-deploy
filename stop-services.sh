@@ -11,14 +11,47 @@ echo ""
 
 # 停止 Docker 容器（如果运行）
 echo "0. 检查并停止 Docker 容器..."
+PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
+INSTANCES_FILE="$PROJECT_ROOT/.instances.json"
+
 if command -v docker &> /dev/null && docker ps &> /dev/null 2>&1; then
-    # 检查是否有相关容器运行
-    RUNNING_CONTAINERS=$(docker compose ps --services --filter "status=running" 2>/dev/null | wc -l | tr -d ' ')
+    # 首先使用 docker compose down 停止所有 compose 管理的容器
+    if [ -f "$PROJECT_ROOT/docker-compose.yml" ]; then
+        cd "$PROJECT_ROOT"
+        RUNNING_SERVICES=$(docker compose ps --services --filter "status=running" 2>/dev/null | wc -l | tr -d ' ')
+        
+        if [ "$RUNNING_SERVICES" -gt 0 ]; then
+            echo "  发现运行中的 Docker Compose 服务，正在停止..."
+            docker compose down 2>/dev/null && echo "  ✓ Docker Compose 容器已停止" || echo "  ⚠ Docker Compose 容器停止失败"
+        fi
+    fi
     
-    if [ "$RUNNING_CONTAINERS" -gt 0 ]; then
-        echo "  发现运行中的 Docker 容器，正在停止..."
-        cd "$(dirname "$0")"
-        docker compose down 2>/dev/null && echo "  ✓ Docker 容器已停止" || echo "  ⚠ Docker 容器停止失败"
+    # 检查并停止所有动态添加的容器（基于 .instances.json）
+    if [ -f "$INSTANCES_FILE" ] && command -v jq >/dev/null 2>&1; then
+        CONTAINERS=$(jq -r '.instances[]?.containerName // empty' "$INSTANCES_FILE" 2>/dev/null | tr '\n' ' ')
+        if [ -n "$CONTAINERS" ]; then
+            for container in $CONTAINERS; do
+                if docker ps -a --filter "name=$container" --format "{{.Names}}" | grep -q "$container"; then
+                    echo "  停止容器: $container"
+                    docker stop "$container" 2>/dev/null || true
+                    docker rm "$container" 2>/dev/null || true
+                fi
+            done
+            echo "  ✓ 动态容器已清理"
+        fi
+    fi
+    
+    # 最终检查：清理所有 render-monitor-app- 前缀的容器
+    REMAINING_CONTAINERS=$(docker ps -a --filter "name=render-monitor-app-" --format "{{.Names}}" 2>/dev/null || true)
+    if [ -n "$REMAINING_CONTAINERS" ]; then
+        echo "  发现遗留容器，正在清理..."
+        echo "$REMAINING_CONTAINERS" | while read container; do
+            if [ -n "$container" ]; then
+                docker stop "$container" 2>/dev/null || true
+                docker rm "$container" 2>/dev/null || true
+            fi
+        done
+        echo "  ✓ 遗留容器已清理"
     else
         echo "  ✓ 没有运行中的 Docker 容器"
     fi

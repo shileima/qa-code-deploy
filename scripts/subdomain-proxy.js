@@ -2,16 +2,19 @@
 /**
  * 子域名反向代理服务器（纯 Node.js 实现）
  * 根据 Host 头自动路由到不同的 Vite 实例
+ * 支持从配置文件读取路由映射，支持信号重载（SIGHUP）
  */
 
 const http = require('http');
 const { URL } = require('url');
+const fs = require('fs');
+const path = require('path');
 
-// 子域名前缀到端口的映射
-// 注意：用户需求是反向的
-// - mteyg1wky8uqgs.localhost -> 实例 1 (端口 5174)
-// - mttf3dq7wrg9on.localhost -> 实例 2 (端口 5175)
-const SUBDOMAIN_PORT_MAP = {
+// 配置文件路径
+const CONFIG_FILE = path.join(__dirname, '../config/subdomain-proxy.json');
+
+// 默认路由映射（向后兼容）
+const DEFAULT_SUBDOMAIN_PORT_MAP = {
   'mteyg1wky8uqgs': 5174,  // 实例 1
   'mttf3dq7wrg9on': 5175,  // 实例 2
 };
@@ -19,15 +22,51 @@ const SUBDOMAIN_PORT_MAP = {
 // 默认端口
 const DEFAULT_PORT = 5174;
 
-console.log('========================================');
-console.log('  子域名反向代理服务器');
-console.log('========================================\n');
+// 当前路由映射（可动态更新）
+let SUBDOMAIN_PORT_MAP = { ...DEFAULT_SUBDOMAIN_PORT_MAP };
 
-console.log('子域名路由配置:');
-Object.entries(SUBDOMAIN_PORT_MAP).forEach(([prefix, port]) => {
-  console.log(`  ${prefix}.localhost -> localhost:${port}`);
+// 从配置文件加载路由映射
+function loadRouteConfig() {
+  try {
+    if (fs.existsSync(CONFIG_FILE)) {
+      const configContent = fs.readFileSync(CONFIG_FILE, 'utf8');
+      const config = JSON.parse(configContent);
+      if (config.routes && typeof config.routes === 'object') {
+        SUBDOMAIN_PORT_MAP = { ...config.routes };
+        console.log(`[配置] 已从配置文件加载 ${Object.keys(SUBDOMAIN_PORT_MAP).length} 个路由`);
+        return true;
+      }
+    }
+  } catch (err) {
+    console.error(`[警告] 无法加载配置文件 ${CONFIG_FILE}:`, err.message);
+    console.log('[配置] 使用默认路由映射');
+  }
+  return false;
+}
+
+// 打印路由配置
+function printRouteConfig() {
+  console.log('========================================');
+  console.log('  子域名反向代理服务器');
+  console.log('========================================\n');
+
+  console.log('子域名路由配置:');
+  Object.entries(SUBDOMAIN_PORT_MAP).forEach(([prefix, port]) => {
+    console.log(`  ${prefix}.localhost -> localhost:${port}`);
+  });
+  console.log(`  默认 -> localhost:${DEFAULT_PORT}\n`);
+}
+
+// 加载初始配置
+loadRouteConfig();
+printRouteConfig();
+
+// 监听 SIGHUP 信号以重载配置
+process.on('SIGHUP', () => {
+  console.log('\n[信号] 收到 SIGHUP，重载配置...');
+  loadRouteConfig();
+  printRouteConfig();
 });
-console.log(`  默认 -> localhost:${DEFAULT_PORT}\n`);
 
 // 从 Host 头中提取子域名前缀
 function extractSubdomain(host) {
@@ -189,6 +228,9 @@ server.listen(PROXY_PORT, () => {
   Object.entries(SUBDOMAIN_PORT_MAP).forEach(([prefix, port]) => {
     console.log(`  - ${prefix}: localhost:${port}`);
   });
+  console.log('');
+  
+  console.log('提示: 发送 SIGHUP 信号可重载配置（kill -HUP <PID>）');
   console.log('');
 }).on('error', (err) => {
   if (err.code === 'EACCES') {

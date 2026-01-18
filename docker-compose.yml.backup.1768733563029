@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  # Vite 应用实例 1 (通过 mteyg1wky8uqgs.localhost 访问)
+  # 容器内部监听 5174，宿主机映射到 5174
+  vite-app-1:
+    build:
+      context: ./packages/demo-app
+      dockerfile: Dockerfile
+    container_name: render-monitor-app-1
+    environment:
+      - NODE_ENV=development
+      - SUBDOMAIN_PREFIX=mteyg1wky8uqgs
+      - PORT=5174
+      - HOST=0.0.0.0
+      - VITE_APP_PREFIX=mteyg1wky8uqgs
+    ports:
+      - "5174:5174"
+    volumes:
+      - ./packages/demo-app:/app
+      - /app/node_modules
+    networks:
+      - render-monitor-network
+    command: sh -c "CI=true pnpm install && npm run dev -- --port 5174 --host 0.0.0.0"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5174/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Vite 应用实例 2 (通过 mttf3dq7wrg9on.localhost 访问)
+  # 容器内部监听 5174，宿主机映射到 5175
+  vite-app-2:
+    build:
+      context: ./packages/demo-app
+      dockerfile: Dockerfile
+    container_name: render-monitor-app-2
+    environment:
+      - NODE_ENV=development
+      - SUBDOMAIN_PREFIX=mttf3dq7wrg9on
+      - PORT=5174
+      - HOST=0.0.0.0
+      - VITE_APP_PREFIX=mttf3dq7wrg9on
+    ports:
+      - "5175:5174"  # 宿主机 5175 映射到容器内 5174
+    volumes:
+      - ./packages/demo-app:/app
+      - /app/node_modules
+    networks:
+      - render-monitor-network
+    command: sh -c "CI=true pnpm install && npm run dev -- --port 5174 --host 0.0.0.0"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5174/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # 可选：第三个实例（动态添加）
+  # vite-app-3:
+  #   build:
+  #     context: ./packages/demo-app
+  #     dockerfile: Dockerfile
+  #   container_name: render-monitor-app-3
+  #   environment:
+  #     - NODE_ENV=development
+  #     - SUBDOMAIN_PREFIX=your-prefix-here
+  #     - PORT=5176
+  #     - HOST=0.0.0.0
+  #     - VITE_APP_PREFIX=your-prefix-here
+  #   ports:
+  #     - "5176:5176"
+  #   volumes:
+  #     - ./packages/demo-app:/app
+  #     - /app/node_modules
+  #   networks:
+  #     - render-monitor-network
+  #   command: npm run dev -- --port 5176 --host 0.0.0.0
+  #   restart: unless-stopped
+
+networks:
+  render-monitor-network:
+    driver: bridge
+
+volumes:
+  nginx_cache:
+  nginx_logs:
