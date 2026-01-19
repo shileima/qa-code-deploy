@@ -30,35 +30,6 @@ services:
       timeout: 5s
       retries: 3
 
-  # Vite 应用实例 2 (通过 5bcabbedd996ba44.localhost 访问)
-  # 容器内部监听 5174，宿主机映射到 5175
-  vite-app-2:
-    build:
-      context: ./packages/demo-app
-      dockerfile: Dockerfile
-    container_name: render-monitor-app-5bcabbedd996ba44
-    environment:
-      - NODE_ENV=development
-      - SUBDOMAIN_PREFIX=5bcabbedd996ba44
-      - PORT=5174
-      - HOST=0.0.0.0
-      - VITE_APP_PREFIX=5bcabbedd996ba44
-      - CI=true
-    ports:
-      - "5175:5174"
-    volumes:
-      - ./packages/demo-app:/app
-      - /app/node_modules
-    networks:
-      - render-monitor-network
-    command: sh -c "CI=true pnpm install && npm run dev -- --port 5174 --host 0.0.0.0"
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5174/ || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
 networks:
   render-monitor-network:
     driver: bridge

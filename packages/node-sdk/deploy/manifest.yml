@@ -1,0 +1,26 @@
+version: v1
+build:
+  tools:
+    node: 14.15.1
+    git:
+  cache:
+    dirs:
+      - node_modules
+  run:
+    workDir: ./
+    cmd:
+      - sh deploy/compile.sh
+  target:
+    files:
+    # 打包时，包含隐藏文件，https://km.sankuai.com/page/13945939#id-target%EF%BC%88%E5%BF%85%E5%A1%AB%EF%BC%89
+      - ./
+
+autodeploy:
+  hulkos: centos7
+  targetDir: /opt/meituan/apps/nest/
+  run: sh deploy/run.sh
+  check: curl -v localhost:8080/health
+  checkRetry: 10
+  checkInterval: 10s
+  tools:
+    node: 14.15.1

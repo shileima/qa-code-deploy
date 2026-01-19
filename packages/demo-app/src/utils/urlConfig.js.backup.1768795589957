@@ -78,27 +78,6 @@ const APP_CONFIGS = {
     }
   },
 
-  // 实例 B 的配置 (5bcabbedd996ba44)
-  '5bcabbedd996ba44': {
-    appName: '应用实例 B',
-    appId: 'app-5bcabbedd996ba44',
-    theme: {
-      primaryColor: '#10b981',
-      secondaryColor: '#34d399',
-      backgroundColor: '#f9fafb'
-    },
-    features: {
-      showFeatureA: false,
-      showFeatureB: true,
-      showFeatureC: true
-    },
-    apiEndpoint: 'https://api-5bcabbedd996ba44.example.com',
-    analytics: {
-      enabled: true,
-      trackingId: 'UA-5BCABBEDD996BA44-001'
-    }
-  },
-
   // 默认配置（用于本地开发或其他环境）
   default: {
     appName: '默认应用',
@@ -119,7 +98,7 @@ const APP_CONFIGS = {
       trackingId: null
     }
   }
-};;;;;;;;
+};;;;;;;
 
 /**
  * 根据子域名前缀获取应用配置

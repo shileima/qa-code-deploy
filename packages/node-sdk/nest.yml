@@ -1,0 +1,11 @@
+appKey: com.sankuai.waimaiqafc.fsd.app
+port: 8080
+templateType: web_nodejs_egg
+provider: # 备注：provider 只用于 Nest-CLI 本地启动测试。
+  runtime: nodejs
+  envs: # 设置环境变量
+    key1: value1   # 例如：NODE_ENV：'test'
+    
+functions: # 有用
+  main:
+    handler: dist/nest.main

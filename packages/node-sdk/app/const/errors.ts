@@ -1,0 +1,12 @@
+const tokens = {
+    CREATE_TOKEN_NO_APPKEY: 1001,
+    EMPTY_ADMIN_TOKEN: 1002,
+    BAD_ADMIN_TOKEN: 1003,
+    ADMIN_TOKEN_FORBIDDEN: 1004,
+    EMPTY_ADMIN_TOKEN_PARAM: 1005,
+    CREATE_TOKEN_BAD_REQUEST: 1006
+};
+
+export default {
+    tokens
+};

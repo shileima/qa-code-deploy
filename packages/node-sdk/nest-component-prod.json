@@ -1,0 +1,127 @@
+{
+    "component": [
+        {
+            "name":"s3",
+            "type":"s3",
+            "enable":false,
+            "doc":"使用文档：https://km.sankuai.com/collabpage/1570702633",
+            "parameter":{
+                "accessKeyId": "",
+                "accessKeySecret": "", 
+                "endpoint": "",
+                "bucket":"",
+                "secure": false
+            }
+        },
+        {
+            "name":"rds",
+            "type":"rds-orm",
+            "doc":"使用文档：https://km.sankuai.com/collabpage/1541710188",
+            "enable":false,
+            "parameter":{
+                "dialect": "mysql",
+                "appName": "",
+                "jdbcRef": "",
+                "routeType": "master-only",
+                "pool": {
+                    "min": 0,
+                    "max": 10,
+                    "idle": 30000
+                },
+                "define": {
+                    "freezeTableName": true,
+                    "timestamps": false
+                }
+            }
+        },
+        {
+            "name":"rds1",
+            "type":"rds-native",
+            "doc":"使用文档：https://km.sankuai.com/collabpage/1541710188",
+            "enable":false,
+            "parameter":{
+                "appName": "",
+                "jdbcRef": "",
+                "routeType": "master-only"
+            }
+        },
+        {
+            "name":"squirrel", 
+            "type":"squirrel",
+            "doc":"使用文档：https://km.sankuai.com/collabpage/1541710188",
+            "enable":false,
+                "parameter": {
+                "database": "",
+                "methodTimeOut": 1000,
+                "routerType": "master-slave",
+                "appName": "",
+                "connTimeout": 1000,
+                "dsMonitorable": false,
+                "configFilePath": "./nodesdk_samples/squirrel/squirrel-proxy.conf"
+            }
+        },{
+            "name":"mafka", 
+            "type":"mafka",
+            "doc":"使用文档：https://km.sankuai.com/collabpage/1570781867",
+            "enable":false,
+                "parameter":{  
+                   "consumer": {
+                        "namespace": "",
+                        "appkey": "",
+                        "topic": "",
+                        "group":"",
+                        "highLevelProducer": {},
+                        "kafkaClient": {}  
+                    },
+                    "producer": {
+                        "namespace": "",
+                        "appkey": "",
+                        "topic": ""
+                    }
+                }
+        },{
+        "name":"kms",
+        "type":"kms",
+        "doc":"使用文档：https://km.sankuai.com/collabpage/1541643538",
+        "enable":false,
+        "parameter":{
+        }
+    },{
+        "name":"lion", 
+        "type":"lion",
+        "doc":"使用文档：https://km.sankuai.com/collabpage/1570732435",
+        "enable":false,
+        "parameter": {
+            "userName":"",
+            "passWord":""
+        }
+    },
+    {
+        "name":"sso", 
+        "type":"sso",
+        "doc":"使用文档：https://km.sankuai.com/collabpage/1541539640",
+        "isMiddleWare":true,
+        "excludes":[],
+        "context":["userInfo","accessToken","_ssoClient"],
+        "enable":false,
+        "parameter": {
+            "clientId": "",
+            "secret": ""
+        }
+    },
+    {
+        "name":"thrift", 
+        "type":"thrift",
+        "doc":"使用文档：https://km.sankuai.com/collabpage/1541559793",
+        "enable":false,
+        "parameter": {
+            "localAppKey": "com.sankuai.nest.example.nodejs",      
+            "remoteAppKey": "com.sankuai.cloudx.web",
+            "env":"prod",
+            "enableAuth": true,
+            "thriftFileOutPath":"./nodesdk_samples/thrift",
+            "thriftFilePath":"./nodesdk_samples/thrift/service.thrift"
+        }
+    }]
+
+}
